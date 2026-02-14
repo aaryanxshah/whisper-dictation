@@ -34,8 +34,57 @@ Set up local voice-to-text on my Mac using Hammerspoon, whisper-cpp, and ffmpeg.
    ffmpeg -f avfoundation -list_devices true -i "" 2>&1 | grep -A10 "audio devices"
    Use the correct device number (usually :0 or :1) in the config below.
 
-4. Create ~/.hammerspoon/init.lua using the init.lua from this repo.
-   Replace DEVICE_NUMBER with the correct number from step 3.
+4. Create ~/.hammerspoon/init.lua with this exact config (replace DEVICE_NUMBER with the number from step 3):
+
+-- Voice-to-text with Option+V
+local voiceTask = nil
+local isRecording = false
+local tempWav = "/tmp/voice_input.wav"
+local whisperModel = os.getenv("HOME") .. "/.whisper/ggml-base.en.bin"
+
+local menubar = hs.menubar.new()
+menubar:setTitle("")
+
+local function updateMenubar(state)
+  if state == "recording" then
+    menubar:setTitle("REC")
+  elseif state == "transcribing" then
+    menubar:setTitle("...")
+  else
+    menubar:setTitle("")
+  end
+end
+
+hs.hotkey.bind({"alt"}, "v", function()
+  if not isRecording then
+    isRecording = true
+    updateMenubar("recording")
+
+    voiceTask = hs.task.new("/opt/homebrew/bin/ffmpeg", function() end,
+      {"-y", "-f", "avfoundation", "-i", ":DEVICE_NUMBER", "-ar", "16000", "-ac", "1", tempWav})
+    voiceTask:start()
+  else
+    isRecording = false
+    updateMenubar("transcribing")
+
+    if voiceTask then
+      voiceTask:terminate()
+      voiceTask = nil
+    end
+
+    hs.timer.doAfter(0.5, function()
+      local whisperTask = hs.task.new("/opt/homebrew/bin/whisper-cli", function(exitCode, stdOut, stdErr)
+        updateMenubar("")
+        local result = stdOut:gsub("%[.*%]", ""):gsub("\n", " "):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", " ")
+        if result and result ~= "" then
+          hs.eventtap.keyStrokes(result)
+        end
+        os.remove(tempWav)
+      end, {"-m", whisperModel, "-f", tempWav, "--no-timestamps"})
+      whisperTask:start()
+    end)
+  end
+end)
 
 5. Open Hammerspoon:
    open /Applications/Hammerspoon.app

@@ -6,7 +6,7 @@ Your audio never leaves your machine. It uses [Whisper.cpp](https://github.com/g
 
 Works in any app -- your terminal, browser, Slack, Notes, VS Code, anything with a text cursor.
 
-## Demo
+## Usage
 
 | Action | What Happens |
 |---|---|

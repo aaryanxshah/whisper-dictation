@@ -165,16 +165,6 @@ Click the Hammerspoon menu bar icon > **Reload Config**. Press **Option+V** to s
 | Option+V doesn't respond | Accessibility permission not granted for Hammerspoon |
 | Slow or inaccurate transcription | Download a larger model: replace `ggml-base.en.bin` with `ggml-medium.en.bin` in both the curl command and init.lua |
 
-## How It Works
-
-1. **Option+V** triggers Hammerspoon's hotkey listener
-2. Hammerspoon spawns `ffmpeg` to record from your microphone to a temp WAV file
-3. **Option+V** again stops recording and spawns `whisper-cli` to transcribe the WAV
-4. The transcribed text is typed at your cursor using `hs.eventtap.keyStrokes`
-5. The temp file is deleted
-
-Everything runs locally. Zero network calls.
-
 ## License
 
 MIT

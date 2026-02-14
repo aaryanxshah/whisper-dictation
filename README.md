@@ -130,8 +130,9 @@ Note the number next to your microphone (e.g., `[0] MacBook Pro Microphone` mean
 ### 4. Install the config
 
 ```bash
+git clone https://github.com/aaryanxshah/whisper-dictation.git
 mkdir -p ~/.hammerspoon
-cp init.lua ~/.hammerspoon/init.lua
+cp whisper-dictation/init.lua ~/.hammerspoon/init.lua
 ```
 
 Edit `~/.hammerspoon/init.lua` and replace `:0` in the `-i` argument with your device number from step 3 if different.

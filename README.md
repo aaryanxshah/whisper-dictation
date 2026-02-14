@@ -17,7 +17,7 @@ Works in any app -- your terminal, browser, Slack, Notes, VS Code, anything with
 
 ## Quick Setup with Claude Code
 
-If you have [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed, open your terminal, launch it, and paste this prompt:
+You'll need [Homebrew](https://brew.sh) and [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed. Then open your terminal, launch Claude Code, and paste this prompt:
 
 ```
 Set up local voice-to-text on my Mac using Hammerspoon, whisper-cpp, and ffmpeg.

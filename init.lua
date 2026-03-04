@@ -30,8 +30,13 @@ hs.hotkey.bind({"alt"}, "v", function()
     updateMenubar("transcribing")
 
     if voiceTask then
-      voiceTask:terminate()
-      voiceTask = nil
+      voiceTask:interrupt()
+      hs.timer.doAfter(1, function()
+        if voiceTask and voiceTask:isRunning() then
+          voiceTask:terminate()
+        end
+        voiceTask = nil
+      end)
     end
 
     hs.timer.doAfter(0.5, function()
